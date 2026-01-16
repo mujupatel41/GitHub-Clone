@@ -1,8 +1,13 @@
+require("dotenv").config();
 const AWS = require("aws-sdk");
 
 AWS.config.update({region: "eu-north-1"});
 
-const s3 = AWS.S3();
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: "eu-north-1"
+});
 
 const S3_BUCKET = "mygitbucket41";
 
