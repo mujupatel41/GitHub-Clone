@@ -1,5 +1,27 @@
-async function revertRepo(){
-    console.log("Code was reverted");
+const fs = require("fs");
+const path = require("path");
+const {promisify} = require("util");
+
+const readdir = promisify(fs.readdir);
+const copyfile = promisify(fs.copyFile);
+
+async function revertRepo(commitID){
+    const repoPath = path.resolve(process.cwd(), ".myGit");
+    const commitsPath = path.join(repoPath, "commits");
+
+    try{
+        const commitDir = path.join(commitsPath, commitID);
+        const files = await readdir(commitDir);
+        const parentDir = path.join(repoPath, "..");
+
+        for(const file of files){
+            await copyfile(path.join(commitDir, file), path.join(parentDir, file));
+        }
+
+        console.log(`Commit ${commitID} reverted successfully`);
+    } catch(err){
+        console.error("Unable to revert : ", err);
+    }
 };
 
 module.exports = {revertRepo};
