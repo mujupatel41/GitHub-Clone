@@ -5,6 +5,7 @@ const cors = require("cors");
 const http = require("http");
 const bodyParser = require("body-parser");
 const {Server} = require("socket.io");
+const mainRouter = require("./routes/main.router.js");
 
 const yargs = require("yargs");
 const { hideBin } = require("yargs/helpers");
@@ -76,9 +77,7 @@ function startServer(){
 
     app.use(cors({origin:"*"}));
 
-    app.get("/", (req, res) =>{
-        res.send("Wellcome!");
-    });
+    app.use("/", mainRouter);
 
     let user = "test";
     const httpServer = http.createServer(app);
