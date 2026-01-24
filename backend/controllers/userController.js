@@ -1,21 +1,21 @@
 const getAllUsers = (req, res) =>{
-    console.log("All Users Fetched!");
+   res.send("All Users Fetched!");
 };
 
 const signup =  (req, res) =>{
-    console.log("Signed Up!");
+    res.send("Signed Up!");
 };
 
 const login = (req, res) =>{
-    console.log("Logging In!");
+    res.send("Logging In!");
 };
 
 const getUserProfile = (req, res) =>{
-    console.log("Profile Fetched!");
+    res.send("Profile Fetched!");
 };
 
 const updateUserProfile = (req, res) =>{
-    console.log("Profile Updated!");
+    res.send("Profile Updated!");
 };
 
 const deleteUserProfile = (req, res) =>{
