@@ -40,4 +40,4 @@ const UserSchema = new Schema({
 
 const NewUser = mongoose.model("NewUser", UserSchema);
 
-export default newUser;
+export default NewUser;
