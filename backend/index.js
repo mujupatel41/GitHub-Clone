@@ -79,7 +79,7 @@ function startServer(){
 
     app.use("/", mainRouter);
 
-    let user = "test";
+    let user = "githubclone";
     const httpServer = http.createServer(app);
     const io = new Server(httpServer, {
         cors: {
