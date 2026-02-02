@@ -96,11 +96,101 @@ const getAllRepositories = async (req, res) =>{
 };
 
 const fetchRepositoryById = async (req, res) =>{
-    res.send("Repository details fetched!");
+    const repoID = req.params.id;
+    
+    try{
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
+        const repository = await repoCollection.aggregate([
+            {
+                $match: {
+                    _id: new ObjectId(repoID),
+                }
+            },
+            {
+                // Convert the 'owner' string to an actual ObjectId before the join
+                $addFields: {
+                    ownerId: { $toObjectId: "$owner" }
+                }
+            },
+            {
+                // 3. Now you can populate (lookup) the user
+                $lookup: {
+                    from: "users",
+                    localField: "ownerId",
+                    foreignField: "_id",
+                    as: "owner"
+                }
+            },
+            {
+                // 4. Flatten the ownerDetails array into an object
+                $unwind: "$owner"
+            },
+            {
+                // Optional: Exclude sensitive info like passwords from the owner object
+                $project: {
+                    "owner.password": 0,
+                    "owner.email": 0
+                }
+            }
+    
+        ]).toArray();
+        res.json(repository);
+    } catch(err){
+        console.error("Error via fething repository by ID : ", err.message);
+        res.status(500).send("Server Error!");
+    }
 };
 
 const fetchRepositoryByName = async (req, res) =>{
-    res.send("Repository was Created!");
+    const repoName = req.params.name;
+    
+    try{
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
+        const repository = await repoCollection.aggregate([
+            {
+                $match: {
+                    name: repoName,
+                }
+            },
+            {
+                // Convert the 'owner' string to an actual ObjectId before the join
+                $addFields: {
+                    ownerId: { $toObjectId: "$owner" }
+                }
+            },
+            {
+                // 3. Now you can populate (lookup) the user
+                $lookup: {
+                    from: "users",
+                    localField: "ownerId",
+                    foreignField: "_id",
+                    as: "owner"
+                }
+            },
+            {
+                // 4. Flatten the ownerDetails array into an object
+                $unwind: "$owner"
+            },
+            {
+                // Optional: Exclude sensitive info like passwords from the owner object
+                $project: {
+                    "owner.password": 0,
+                    "owner.email": 0
+                }
+            }
+    
+        ]).toArray();
+        res.json(repository);
+    } catch(err){
+        console.error("Error via fething repository by Name : ", err.message);
+        res.status(500).send("Server Error!");
+    }
 };
 const fetchRepositoryForCurrentUser = async (req, res) =>{
     res.send("Repositories for logged in user fetched!");
