@@ -1,7 +1,23 @@
-const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
+const dotenv = require("dotenv");
 const Repository = require("../models/repoModel");
 const Issue = require("../models/issueModel");
 const User = require("../models/userModel");
+const ObjectId = require("mongodb").ObjectId;
+
+dotenv.config();
+
+let uri = process.env.MONGODB_URL;
+
+let client;
+
+async function connectClient(){
+    if(!client){
+        client = new MongoClient(uri);
+
+        await client.connect();
+    };
+}
 
 
 const createRepository = async (req, res) =>{
@@ -9,24 +25,28 @@ const createRepository = async (req, res) =>{
     
     try{
 
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
         if(!name){
             return res.status(400).json({error: "Repository name is required!"});
         };
 
-        if(!mongoose.Types.ObjectId.isValid(owner)){
+        if(!ObjectId.isValid(owner)){
             return res.status(400).json({ error: "Invalid user ID!"});
         };
 
-        const newRepository = new Repository({
+        const newRepository = {
             name,
             description,
             content,
             visibility,
             owner,
             issues
-        });
+        };
 
-        const result = await newRepository.save();
+        const result = await repoCollection.insertOne(newRepository);
 
         res.status(201).json({ message: "Repository Created!", repositoryId: result._id});
 
