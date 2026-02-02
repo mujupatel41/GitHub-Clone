@@ -57,7 +57,42 @@ const createRepository = async (req, res) =>{
 };
 
 const getAllRepositories = async (req, res) =>{
-    res.send("All Repository Fethed!");
+
+    try{
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
+        const repositories = await repoCollection.aggregate([
+    {
+        // Convert the 'owner' string to an actual ObjectId before the join
+        $addFields: {
+            ownerId: { $toObjectId: "$owner" }
+        }
+    },
+    {
+        $lookup: {
+            from: "users",
+            localField: "ownerId", // Use the converted field here
+            foreignField: "_id",
+            as: "owner"
+        }
+    },
+    { $unwind: "$owner" },
+    {
+        // Optional: Exclude sensitive info like passwords from the owner object
+        $project: {
+            "owner.password": 0,
+            "owner.email": 0
+        }
+    }
+]).toArray();
+
+        res.json(repositories)
+    } catch(err){
+        console.error("Error via fething repositories : ", err.message);
+        res.status(500).send("Server Error!");
+    }
 };
 
 const fetchRepositoryById = async (req, res) =>{
