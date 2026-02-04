@@ -193,19 +193,98 @@ const fetchRepositoryByName = async (req, res) =>{
     }
 };
 const fetchRepositoryForCurrentUser = async (req, res) =>{
-    res.send("Repositories for logged in user fetched!");
+    const {userId} = req.user;
+    
+    try{
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
+        const repository = await repoCollection.find({owner: userId}).toArray();
+        
+        if(!repository || repository.length == 0){
+            return res.status(404).json({error: "User Reposiories Not Found!"});
+        }
+        res.json(repository);
+    } catch(err){
+        console.error("Error via fething User Repositories : ", err.message);
+        res.status(500).send("Server Error!");
+    }
 };
 
 const updateRepositoryById = async (req, res) =>{
-    res.send("Repository Updated!");
+    const repoId = req.params.id;
+    const {content, description} = req.body;
+
+    try{
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
+        const result = await repoCollection.updateOne(
+            {_id: new ObjectId(repoId)},
+            { $set: { content, description } }
+        );
+
+        if(result.matchedCount == 0){
+            return res.status(404).json({error: "No document found to update!"});
+        }
+
+        res.json({message: "Repository Updated Successfully!", 
+            result
+        });
+    } catch(err){
+        console.error("Error via Updating Repository : ", err.message);
+        res.status(500).send("Server Error!");
+    }
 };
 
 const toggleVisibilityById = async (req, res) =>{
-    res.se;nd("Visibility Toggled!");
+    const repoId = req.params.id;
+
+    try{
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
+        const repository = await repoCollection.findOne({_id: new ObjectId(repoId)});
+
+        if(!repository){
+            return res.status(404).json({error: "No document found to update!"});
+        }
+
+        const result = await repoCollection.updateOne(
+            {_id: new ObjectId(repoId)},
+            { $set: { visibility: !repository.visibility } }
+        );
+
+        res.json({message: "Repository Visibility Toggled!", 
+            result
+        });
+    } catch(err){
+        console.error("Error via Toggling visibility : ", err.message);
+        res.status(500).send("Server Error!");
+    }
 }
 
 const deleteRepositoryById = async (req, res) =>{
-    res.send("Repository Deleted!");
+    const repoId = req.params.id;
+
+    try{   
+        await connectClient();
+        const db = client.db("githubclone");
+        const repoCollection = db.collection("repositories");
+
+        const result = await repoCollection.deleteOne({_id: new ObjectId(repoId)});
+        if(result.matchedCount == 0){
+            return res.status(404).json({error: "No repository found to delete!"});
+        }
+
+        res.json({message: "Repository Deleted Successfully!"});
+    } catch(err){
+        console.error("Error via Deleting Repository : ", err.message);
+        res.status(500).send("Server Error!");
+    }
 };
 
 module.exports = {
