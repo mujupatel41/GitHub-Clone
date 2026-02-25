@@ -1,6 +1,5 @@
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
-const { deleteOne } = require("../models/repoModel");
 const ObjectId = require("mongodb").ObjectId;
 
 dotenv.config();
