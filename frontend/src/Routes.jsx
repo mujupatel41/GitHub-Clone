@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useNav, useRoutes} from 'react-router-dom';
+import {useNavigate, useRoutes} from 'react-router-dom';
 
 // Pages List
 
