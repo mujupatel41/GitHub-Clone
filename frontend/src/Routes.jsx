@@ -51,6 +51,11 @@ const ProjectRoutes = () =>{
         }
     ]);
 
+    if (!element) {
+        console.log("useRoutes returned null for location", window.location.pathname);
+        return <div>Page not found or still loading...</div>;
+    }
+
     return element;
 };
 
