@@ -22,6 +22,7 @@ const Login = () =>{
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
+
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
@@ -96,7 +97,7 @@ const Login = () =>{
                 </div>
 
                 <div className="pass-box">
-                    <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+                    <p>New to GitHub? <Link to="/signup">Create an account</Link></p>
                 </div>
             </div>
         </div>
