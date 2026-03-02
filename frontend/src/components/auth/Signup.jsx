@@ -40,11 +40,13 @@ const Signup = () =>{
 
     return (
         <div className="login-wraper">
-            <div className="login-logo-container">
-                <img className='logo-login' src={logo} alt="github-logo" />
-            </div>
+           
 
             <div className="login-box-wrapper">
+                <div className="login-logo-container">
+                    <img className='logo-login' src={logo} alt="github-logo" />
+                </div>
+
                 <div className="login-heading" style={{ padding: 8 }}>
                         <PageHeader>
                             <PageHeader.TitleArea variant="large">
@@ -61,7 +63,6 @@ const Signup = () =>{
                             onChange={(e)=>setUsername(e.target.value)} id='Username' className='input' type='text' />
 
                     </div>
-
 
                     <div>
                         <label className='label' htmlFor="email">Email</label>

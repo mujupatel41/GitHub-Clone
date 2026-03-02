@@ -44,12 +44,13 @@ const Login = () =>{
 
     return (
         <div className="login-wraper">
-            <div className="login-logo-container">
-                <img className='logo-login' src={logo} alt="github-logo" />
-            </div>
 
             <div className="login-box-wrapper">
-                <div className="login-heading" style={{ padding: 8 }}>
+                <div className="login-logo-container">
+                    <img className='logo-login' src={logo} alt="github-logo" />
+                </div>
+
+                <div className="login-heading" >
                         <PageHeader>
                             <PageHeader.TitleArea variant="large">
                                 <PageHeader.Title>Login</PageHeader.Title>
