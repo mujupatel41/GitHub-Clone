@@ -1,0 +1,7 @@
+#dashboard{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}

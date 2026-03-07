@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./Dashboard.css"
 
 const Dashboard = () =>{
     const [ repositories, setRepositories ] = useState([]);
@@ -29,7 +30,7 @@ const Dashboard = () =>{
             
                 
                 setSuggestedRepositories(data);
-                console.log(data);
+                // console.log(data);
             } catch (error) {
                 console.error("Error fetching repositories:", error);
             }
@@ -37,13 +38,54 @@ const Dashboard = () =>{
 
         if (userId) {
             fetchSuggestedRepositories();
+            fetchRepositories();
         } else {
             console.warn("No userId found in localStorage");
         }
-    }, [])
+    }, []);
+
+    useEffect(()=>{
+        if(searchQuery == ""){
+            setSearchResults(repositories);
+        } else{
+            const filteredRepo = repositories.filter((repo) => repo.name.toLowerCase().include(searchQuery.toLowerCase()));
+            setSearchResults(filteredRepo);
+        }
+    },[searchQuery, repositories])
 
     return (
-        <h1>Dashboard</h1>
+        <section id="dashboard">
+            <aside>
+                <h3>Suggested Repositories</h3>
+                {suggestedRepositories.map((repo) => {
+                    return (
+                        <div key={repo._id}>
+                            <h4>{repo.name}</h4>
+                            <i>{repo.owner.username}</i>
+                        </div>
+                    )
+                })}
+            </aside>
+            <main>
+                <h2>Your Repositories</h2>
+                {repositories.map((repo) => {
+                    return (
+                        <div key={repo._id}>
+                            <h4>{repo.name}</h4>
+                            <i>{repo.owner}</i>
+                        </div>
+                    )
+                })}
+            </main>
+            <aside>
+                <h3>Upcoming Events</h3>
+                <ul>
+                    <li>Tech Conference - 15-Mar</li>
+                    <li>Developer Meetup - 26-Apr</li>
+                    <li>React Sumit - 21-May</li>
+                </ul>
+            </aside>
+        </section>
     )
 };
 
