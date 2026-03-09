@@ -45,10 +45,10 @@ const Dashboard = () =>{
     }, []);
 
     useEffect(()=>{
-        if(searchQuery == ""){
+        if(searchQuery === ""){
             setSearchResults(repositories);
         } else{
-            const filteredRepo = repositories.filter((repo) => repo.name.toLowerCase().include(searchQuery.toLowerCase()));
+            const filteredRepo = repositories.filter((repo) => repo.name.toLowerCase().includes(searchQuery.toLowerCase()));
             setSearchResults(filteredRepo);
         }
     },[searchQuery, repositories])
@@ -68,11 +68,14 @@ const Dashboard = () =>{
             </aside>
             <main>
                 <h2>Your Repositories</h2>
-                {repositories.map((repo) => {
+                <div id="search">
+                    <input type="text" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)}  placeholder="Search.." />
+                </div>
+                {searchResults.map((repo) => {
                     return (
                         <div key={repo._id}>
                             <h4>{repo.name}</h4>
-                            <i>{repo.owner}</i>
+                            <i>{repo.owner.username}</i>
                         </div>
                     )
                 })}
