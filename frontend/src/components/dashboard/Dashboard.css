@@ -1,7 +1,20 @@
 #dashboard{
     display: flex;
-    justify-content: space-evenly;
+    /* justify-content: space-evenly; */
     width: 100vw;
     margin: 0;
     padding: 0;
+}
+
+#user-repo{
+    width: 20%;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    height: 100vh;
+    border-right: 1px solid white;
+}
+
+#username{
+    display: flex;
+    flex-direction: column;
 }

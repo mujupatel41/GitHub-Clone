@@ -1,5 +1,6 @@
 import React from 'react';
 import ProjectRoutes from './Routes.jsx';
+import "./App.css";
 
 function App() {
   return (

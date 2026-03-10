@@ -200,7 +200,36 @@ const fetchRepositoryForCurrentUser = async (req, res) =>{
         const db = client.db("githubclone");
         const repoCollection = db.collection("repositories");
 
-        const repository = await repoCollection.find({owner: userId}).toArray();
+        const repository = await repoCollection.aggregate([
+            {
+                // 1. Match the string exactly like your .find() did
+                $match: { owner: userId }
+            },
+            {
+                // 2. CONVERT the 'owner' string to an ObjectId so it can match the 'users' collection
+                $addFields: {
+                    ownerIdObject: { $toObjectId: "$owner" }
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "ownerIdObject", // Match the converted ID
+                    foreignField: "_id",
+                    as: "ownerDetails"
+                }
+            },
+            {
+                $unwind: "$ownerDetails"
+            },
+            {
+                $project: {
+                    "ownerDetails.password": 0,
+                    "ownerDetails.email": 0,
+                    ownerIdObject: 0 // Clean up the temporary field
+                }
+            }
+        ]).toArray();
         
         if(!repository || repository.length == 0){
             return res.status(404).json({error: "User Reposiories Not Found!"});
