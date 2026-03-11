@@ -9,12 +9,67 @@
 #user-repo{
     width: 20%;
     margin-top: 1rem;
-    margin-left: 1rem;
+    margin-left: 2rem;
+    padding-right: 2rem;
     height: 100vh;
-    border-right: 1px solid white;
+    border-right: 1.5px solid #B7BDC8;
 }
 
 #username{
     display: flex;
-    flex-direction: column;
+    height: 3rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+#top-repo{
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.username-text{
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+    font-weight: 600;
+}
+
+.user-icon{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.new-repo-btn{
+    display: flex;
+    align-items: center;
+    background-color: #006222;
+    border-radius: .4rem;
+    color: white;
+    border: none;
+    border: 1px solid white;
+    font-weight: 500;
+    font-size: smaller;
+}
+
+.btn-icon{
+    margin-right: 5px;
+}
+
+.user-repo-search{
+    width: 100%;
+    height: 2rem;
+    border-radius: .5rem;
+    background-color: #151B23;
+    border: none;
+    border: 1px solid #B7BDC8;
+    padding-left: 1rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.user-repo{
+    display: flex;
+    gap: .5rem;
 }

@@ -3,6 +3,8 @@ import "./Dashboard.css"
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange } from '@mui/material/colors';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
 
 const Dashboard = () =>{
     const [ repositories, setRepositories ] = useState([]);
@@ -59,23 +61,29 @@ console.log(userId)
         }
     },[searchQuery, repositories])
 
-    console.log(repositories)
+    console.log(searchResults)
 
     return (
         <section id="dashboard">
             <aside id="user-repo">
+                <div id="username">
+                    <AccountCircleIcon className="user-icon" />
+                    <b className="username-text">{repositories.length > 0 ? repositories[0].ownerDetails.username : 'No repos'}</b>
+                </div>
+
+                <div id="top-repo">
+                    <p>Top Repositories</p>
+                    <button className="new-repo-btn"><DriveFolderUploadOutlinedIcon className="btn-icon" />New</button>
+                </div>
                 
-                <h4 id="username"><Stack direction="row" spacing={2}>
-                    <Avatar src="/broken-image.jpg" />
-                </Stack>{repositories.length > 0 ? repositories[0].ownerDetails.username : 'No repos'}</h4>
                 <div id="search">
-                    <input type="text" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)}  placeholder="Search.." />
+                    <input type="text" className="user-repo-search" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)}  placeholder="Find a repository.." />
                 </div>
                 {searchResults.map((repo) => {
                     return (
-                        <div key={repo._id}>
-                            <h4>{repo.name}</h4>
-                            <i>{repo.owner.username}</i>
+                        <div className="user-repo" key={repo._id}>
+                            <AccountCircleIcon className="user-icon" />
+                            <p>{repo.ownerDetails.username}/{repo.name}</p>
                         </div>
                     )
                 })}
