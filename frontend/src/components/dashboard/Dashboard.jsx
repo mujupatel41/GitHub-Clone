@@ -89,7 +89,7 @@ console.log(userId)
                 })}
             </aside>
 
-            <main>
+            <main id="main">
                 <h3>Suggested Repositories</h3>
                 {suggestedRepositories.map((repo) => {
                     return (
